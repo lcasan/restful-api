@@ -27,4 +27,11 @@ public class ProductController {
 
         return products;
     }
+
+    // Endpoint to delete a product by code
+    @DeleteMapping("/delete/{code}")
+    public boolean deleteProduct(@PathVariable int code) {
+        return productService.deleteProduct(code);
+    }
+
 }

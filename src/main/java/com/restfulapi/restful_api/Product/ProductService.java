@@ -44,6 +44,7 @@ public class ProductService {
     
         try {
             products = jdbc.query(sql, (rs, _) -> new Product(
+                rs.getInt("code"),
                 rs.getString("name"),
                 rs.getDouble("price"),
                 rs.getString("type"),
@@ -57,5 +58,24 @@ public class ProductService {
         }
     
         return products; // Return the list of products
+    }
+
+    // Method to delete a product in the database
+    public boolean deleteProduct(int productCode) {
+        String sql = String.format(
+            """
+                DELETE FROM products WHERE code=%d   
+            """, 
+            productCode
+        );
+
+        try{
+            jdbc.execute(sql);
+            return true; // Returns true if the deletion was successful.
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }
