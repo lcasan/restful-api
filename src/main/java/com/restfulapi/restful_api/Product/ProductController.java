@@ -14,7 +14,7 @@ public class ProductController {
     }
 
     // Enpoint to create product
-    @PutMapping("/new")
+    @PostMapping("/new")
     public boolean createProduct(@RequestBody Product product) {
 
         return productService.createProduct(product);
