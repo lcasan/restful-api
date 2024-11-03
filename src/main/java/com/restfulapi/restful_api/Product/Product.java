@@ -4,6 +4,7 @@ package com.restfulapi.restful_api.Product;
 
 public class Product {    
     // @NotBlank(message = "El nombre es obligatorio")
+    private Integer code;
     private String name;
     private Double price;
     private String type;
@@ -11,7 +12,8 @@ public class Product {
     private String downloadLink;
 
     // Constructor
-    Product(String name, Double price, String type, Double shippingCost, String downloadLink) {
+    Product(Integer code, String name, Double price, String type, Double shippingCost, String downloadLink) {
+        this.code = code;
         this.name = name;
         this.price = price;
         this.type = type;
@@ -20,6 +22,10 @@ public class Product {
     }
 
     // Getter and setter functions
+    public Integer getCode() {
+        return this.code;
+    }
+
     public String getName() {
         return this.name;
     }
