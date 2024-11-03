@@ -34,4 +34,12 @@ public class ProductController {
         return productService.deleteProduct(code);
     }
 
+    // Endpoint to search products by name
+    @GetMapping("/search")
+    public List<Product> getProductByName(@RequestParam String name) {
+        List<Product> products = productService.searchProductsByName(name);
+
+        return products;
+    }
+
 }

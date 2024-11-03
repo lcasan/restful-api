@@ -1,10 +1,11 @@
 package com.restfulapi.restful_api.Product;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class ProductService {
@@ -77,5 +78,34 @@ public class ProductService {
         }
 
         return false;
+    }
+
+    // Method to search products by name
+    public List<Product> searchProductsByName(String productName) {
+        List<Product> products = new ArrayList<>();
+        String sql = String.format(
+            """
+                SELECT * FROM products WHERE name='%s'        
+            """,
+            productName
+        );
+        System.out.println(productName);
+        try{
+            products = jdbc.query(sql, (rs, _) -> new Product(
+                rs.getInt("code"),
+                rs.getString("name"),
+                rs.getDouble("price"),
+                rs.getString("type"),
+                rs.getDouble("shipping_cost"),
+                rs.getString("download_link")
+            ));
+            
+            products.forEach(product -> System.out.println(product));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return products;
     }
 }
