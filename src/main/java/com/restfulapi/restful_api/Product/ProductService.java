@@ -14,28 +14,50 @@ public class ProductService {
     @Autowired
     JdbcTemplate jdbc;
 
+    // Get product by code
+    private List<Product> getProduct(Integer code) {
+        String sql = String.format("SELECT * FROM products WHERE code=%d", code);
+        List<Product> products = new ArrayList<>();
+
+        try {
+            products = jdbc.query(sql, (rs, _) -> new Product(
+                rs.getInt("code"),
+                rs.getString("name"),
+                rs.getDouble("price"),
+                rs.getString("type"),
+                rs.getDouble("shipping_cost"),
+                rs.getString("download_link")
+            ));
+        } catch (Exception e) {
+            e.printStackTrace();
+        } 
+        return products;
+    }
+
     //  Create a new product in the database
-    public boolean createProduct(Product product) {
+    public List<Product> createProduct(Product product) {
+        List<Product> products = new ArrayList<>();
         String sql = String.format(
             """
                 INSERT INTO products (name, price, type, shipping_cost, download_link) 
-                VALUES ('%s', %.2f, '%s', %s, '%s');
+                VALUES ('%s', %.2f, '%s', %s, %s);
             """,
             product.getName(),
             product.getPrice(),
             product.getType(),
             product.getShippingCost() != null ? String.format("%.2f", product.getShippingCost()) : "NULL",
-            product.getDownloadLink() != null ? product.getDownloadLink() : "NULL"
+            product.getDownloadLink() != null ? "'" + product.getDownloadLink() + "'" : "NULL"
         );
 
         try{
             jdbc.execute(sql);
-            return true; // Return true if the insertion was successful
+            products.add(product);
+            return products;
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-    return false; // Return false if the insertion failed
+    return products; 
     }
 
     // Method to get all products from the database
@@ -52,17 +74,16 @@ public class ProductService {
                 rs.getDouble("shipping_cost"),
                 rs.getString("download_link")
             ));
-            
-            products.forEach(product -> System.out.println(product));
         } catch (Exception e) {
             e.printStackTrace();
         }
     
-        return products; // Return the list of products
+        return products;
     }
 
     // Method to delete a product in the database by code
-    public boolean deleteProduct(Integer code) {
+    public List<Product> deleteProduct(Integer code) {
+        List<Product> products = new ArrayList<>();
         String sql = String.format(
             """
                 DELETE FROM products WHERE code=%d   
@@ -71,13 +92,13 @@ public class ProductService {
         );
 
         try{
+            products.add(this.getProduct(code).get(0));
             jdbc.execute(sql);
-            return true; // Returns true if the deletion was successful.
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return false;
+        return products;
     }
 
     // Method to search products by name
@@ -110,7 +131,8 @@ public class ProductService {
     }
 
     // Method to update products by code
-    public boolean updateProduct(Integer code, Product product) {
+    public List<Product> updateProduct(Integer code, Product product) {
+        List<Product> products = new ArrayList<>();
         String sql = String.format(
             """
                 UPDATE products SET name='%s', price=%.2f, type='%s', shipping_cost=%s, download_link='%s' WHERE code=%d
@@ -125,11 +147,11 @@ public class ProductService {
 
         try{
             jdbc.execute(sql);
-            return true; // Returns true if the update was successful.
+            products.add(product);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return false;
+        return products;
     }
 }
