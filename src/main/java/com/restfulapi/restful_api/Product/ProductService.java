@@ -19,13 +19,13 @@ public class ProductService {
         String sql = String.format(
             """
                 INSERT INTO products (name, price, type, shipping_cost, download_link) 
-                VALUES ('%s', %.2f, '%s', %s, %s);
+                VALUES ('%s', %.2f, '%s', %s, '%s');
             """,
             product.getName(),
             product.getPrice(),
             product.getType(),
             product.getShippingCost() != null ? String.format("%.2f", product.getShippingCost()) : "NULL",
-            product.getDownloadLink() != null ? "'" + product.getDownloadLink() + "'" : "NULL"
+            product.getDownloadLink() != null ? product.getDownloadLink() : "NULL"
         );
 
         try{
@@ -61,13 +61,13 @@ public class ProductService {
         return products; // Return the list of products
     }
 
-    // Method to delete a product in the database
-    public boolean deleteProduct(int productCode) {
+    // Method to delete a product in the database by code
+    public boolean deleteProduct(Integer code) {
         String sql = String.format(
             """
                 DELETE FROM products WHERE code=%d   
             """, 
-            productCode
+            code
         );
 
         try{
@@ -107,5 +107,29 @@ public class ProductService {
         }
 
         return products;
+    }
+
+    // Method to update products by code
+    public boolean updateProduct(Integer code, Product product) {
+        String sql = String.format(
+            """
+                UPDATE products SET name='%s', price=%.2f, type='%s', shipping_cost=%s, download_link='%s' WHERE code=%d
+            """,
+            product.getName(), 
+            product.getPrice(),
+            product.getType(),
+            product.getShippingCost() != null ? String.format("%.2f", product.getShippingCost()) : "NULL",
+            product.getDownloadLink() != null ? product.getDownloadLink() : "NULL",
+            code
+        );
+
+        try{
+            jdbc.execute(sql);
+            return true; // Returns true if the update was successful.
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }

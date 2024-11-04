@@ -29,8 +29,8 @@ public class ProductController {
     }
 
     // Endpoint to delete a product by code
-    @DeleteMapping("/delete/{code}")
-    public boolean deleteProduct(@PathVariable int code) {
+    @DeleteMapping("/delete")
+    public boolean deleteProduct(@RequestParam Integer code) {
         return productService.deleteProduct(code);
     }
 
@@ -42,4 +42,9 @@ public class ProductController {
         return products;
     }
 
+    // Endpoint to update a product by code
+    @PutMapping("/update/{code}")
+    public boolean updateProduct(@PathVariable Integer code, @RequestBody Product product) {
+        return productService.updateProduct(code, product);
+    }
 }
