@@ -1,13 +1,22 @@
 package com.restfulapi.restful_api.Product;
-// import javax.validation.constraints.*;
-
+import jakarta.validation.constraints.*;
 
 public class Product {    
-    // @NotBlank(message = "El nombre es obligatorio")
+    @NotBlank
     private Integer code;
+    
+    @NotBlank(message = "The name is required")
     private String name;
+    
+    @NotBlank(message = "The price is required")
+    @Min(value = 0, message = "Price must be a non-negative integer.")
     private Double price;
+
+    @NotBlank(message = "The type is required")
+    @Pattern(regexp = "^(physical|digital)$", message = "Type must be either 'physical' or 'digital'")
     private String type;
+
+    @DecimalMin(value = "0.0", message = "Shipping cost must be a non-negative value for physical products.")
     private Double shippingCost;
     private String downloadLink;
 
