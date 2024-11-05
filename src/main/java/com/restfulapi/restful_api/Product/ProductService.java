@@ -71,7 +71,7 @@ public class ProductService {
                 rs.getString("name"),
                 rs.getDouble("price"),
                 rs.getString("type"),
-                rs.getDouble("shipping_cost"),
+                rs.getObject("shipping_cost", Double.class),
                 rs.getString("download_link")
             ));
         } catch (Exception e) {
