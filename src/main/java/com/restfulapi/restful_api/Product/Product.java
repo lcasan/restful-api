@@ -20,7 +20,9 @@ public class Product {
     @Pattern(regexp = "\\b(https?://[^\\s/$.?#].[^\\s]*|www\\.[^\\s/$.?#].[^\\s]*)\\b", message = "Invalid download link format")
     private String downloadLink;
 
-    // Constructor
+    // Constructors
+    Product(){}
+    
     Product(Integer code, String name, Double price, String type, Double shippingCost, String downloadLink) {
         this.code = code;
         this.name = name;

@@ -1,21 +1,20 @@
 package com.restfulapi.restful_api;
-import java.util.List;
 
 public class CustomResponse<T> {
-    private List<T> data;
+    private T data;
     private String message;
 
-    public CustomResponse(List<T> data, String message) {
+    public CustomResponse(T data, String message) {
         this.data = data;
         this.message = message;
     }
 
     // Getters y Setters
-    public List<T> getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(List<T> data) {
+    public void setData(T data) {
         this.data = data;
     }
 

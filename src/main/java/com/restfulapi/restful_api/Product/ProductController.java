@@ -23,23 +23,22 @@ public class ProductController {
     @PostMapping("/new")
     public ResponseEntity<CustomResponse<Product>> createProduct(@Valid @RequestBody Product product) {
         // Data query
-        List<Product> data = productService.createProduct(product);
+        Product data = productService.createProduct(product);
         
         // Response
-        String message = (data.isEmpty())? "Operation failed" : "Operation successfully";
-        CustomResponse<Product> response = new CustomResponse<>(data, message);
+        CustomResponse<Product> response = new CustomResponse<>(data, "Operation successfully");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // Endpoint to get all products
     @GetMapping("/products")
-    public ResponseEntity<CustomResponse<Product>> getAllProducts() {
+    public ResponseEntity<CustomResponse<List<Product>>> getAllProducts() {
         // Data Query
         List<Product> data = productService.getAllProducts();
         
         // Response
         String message = (data.isEmpty())? "Operation failed" : "Operation successfully";
-        CustomResponse<Product> response = new CustomResponse<>(data, message);
+        CustomResponse<List<Product>> response = new CustomResponse<>(data, message);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -47,34 +46,32 @@ public class ProductController {
     @DeleteMapping("/delete")
     public ResponseEntity<CustomResponse<Product>> deleteProduct(@RequestParam Integer code) {
         // Data query 
-        List<Product> data = productService.deleteProduct(code);
-
-        // Response
-        String message = (data.isEmpty())? "Operation failed" : "Operation successfully";
-        CustomResponse<Product> response = new CustomResponse<>(data, message);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    // Endpoint to search products by name
-    @GetMapping("/search")
-    public ResponseEntity<CustomResponse<Product>> getProductByName(@RequestParam String name) {
-        // Data query
-        List<Product> data = productService.searchProductsByName(name);
+        Product data = productService.deleteProduct(code);
 
         // Response
         CustomResponse<Product> response = new CustomResponse<>(data, "Operation successfully");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // Endpoint to update a product by code
-    @PutMapping("/update/{code}")
-    public ResponseEntity<CustomResponse<Product>> updateProduct(@PathVariable Integer code, @RequestBody Product product) {
+    // Endpoint to search products by name
+    @GetMapping("/search")
+    public ResponseEntity<CustomResponse<List<Product>>> getProductByName(@RequestParam String name) {
         // Data query
-        List<Product> data = productService.updateProduct(code, product);
+        List<Product> data = productService.searchProductsByName(name);
 
         // Response
-        String message = (data.isEmpty())? "Operation failed" : "Operation successfully";
-        CustomResponse<Product> response = new CustomResponse<>(data, message);
+        CustomResponse<List<Product>> response = new CustomResponse<>(data, "Operation successfully");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // Endpoint to update a product by code
+    @PutMapping("/update/{code}")
+    public ResponseEntity<CustomResponse<Product>> updateProduct(@PathVariable Integer code, @Valid @RequestBody Product product) {
+        // Data query
+        Product data = productService.updateProduct(code, product);
+
+        // Response
+        CustomResponse<Product> response = new CustomResponse<>(data, "Operation successfully");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

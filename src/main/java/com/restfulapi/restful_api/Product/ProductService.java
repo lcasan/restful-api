@@ -15,28 +15,28 @@ public class ProductService {
     JdbcTemplate jdbc;
 
     // Get product by code
-    private List<Product> getProduct(Integer code) {
+    private Product getProduct(Integer code) {
         String sql = String.format("SELECT * FROM products WHERE code=%d", code);
-        List<Product> products = new ArrayList<>();
+        Product product = new Product();
 
         try {
-            products = jdbc.query(sql, (rs, _) -> new Product(
+            product = jdbc.query(sql, (rs, _) -> new Product(
                 rs.getInt("code"),
                 rs.getString("name"),
                 rs.getDouble("price"),
                 rs.getString("type"),
                 rs.getObject("shipping_cost", Double.class),
                 rs.getString("download_link")
-            ));
+            )).getFirst();
         } catch (Exception e) {
             e.printStackTrace();
         } 
-        return products;
+
+        return product;
     }
 
     //  Create a new product in the database
-    public List<Product> createProduct(Product product) {
-        List<Product> products = new ArrayList<>();
+    public Product createProduct(Product product) {
         String sql = String.format(
             """
                 INSERT INTO products (name, price, type, shipping_cost, download_link) 
@@ -51,13 +51,12 @@ public class ProductService {
 
         try{
             jdbc.execute(sql);
-            products.add(product);
-            return products;
+            return product;
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-    return products; 
+    return new Product(); 
     }
 
     // Method to get all products from the database
@@ -82,8 +81,9 @@ public class ProductService {
     }
 
     // Method to delete a product in the database by code
-    public List<Product> deleteProduct(Integer code) {
-        List<Product> products = new ArrayList<>();
+    public Product deleteProduct(Integer code) {
+        Product product = new Product();
+
         String sql = String.format(
             """
                 DELETE FROM products WHERE code=%d   
@@ -92,13 +92,15 @@ public class ProductService {
         );
 
         try{
-            products.add(this.getProduct(code).get(0));
+            product = this.getProduct(code);
             jdbc.execute(sql);
+
+            return product;
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return products;
+        return new Product();
     }
 
     // Method to search products by name
@@ -131,8 +133,7 @@ public class ProductService {
     }
 
     // Method to update products by code
-    public List<Product> updateProduct(Integer code, Product product) {
-        List<Product> products = new ArrayList<>();
+    public Product updateProduct(Integer code, Product product) {
         String sql = String.format(
             """
                 UPDATE products SET name='%s', price=%.2f, type='%s', shipping_cost=%s, download_link=%s WHERE code=%d
@@ -147,11 +148,11 @@ public class ProductService {
 
         try{
             jdbc.execute(sql);
-            products.add(product);
+            return product;
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return products;
+        return new Product();
     }
 }
