@@ -135,13 +135,13 @@ public class ProductService {
         List<Product> products = new ArrayList<>();
         String sql = String.format(
             """
-                UPDATE products SET name='%s', price=%.2f, type='%s', shipping_cost=%s, download_link='%s' WHERE code=%d
+                UPDATE products SET name='%s', price=%.2f, type='%s', shipping_cost=%s, download_link=%s WHERE code=%d
             """,
             product.getName(), 
             product.getPrice(),
             product.getType(),
             product.getShippingCost() != null ? String.format("%.2f", product.getShippingCost()) : "NULL",
-            product.getDownloadLink() != null ? product.getDownloadLink() : "NULL",
+            product.getDownloadLink() != null ? "'" + product.getDownloadLink() + "'" : "NULL",
             code
         );
 

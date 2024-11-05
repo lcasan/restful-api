@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.restfulapi.restful_api.CustomResponse;
 
+import jakarta.validation.Valid;
+
 import java.util.List;
 
 @RestController
@@ -19,7 +21,7 @@ public class ProductController {
 
     // Enpoint to create product
     @PostMapping("/new")
-    public ResponseEntity<CustomResponse<Product>> createProduct(@RequestBody Product product) {
+    public ResponseEntity<CustomResponse<Product>> createProduct(@Valid @RequestBody Product product) {
         // Data query
         List<Product> data = productService.createProduct(product);
         
