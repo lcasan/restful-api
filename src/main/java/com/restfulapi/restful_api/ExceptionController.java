@@ -25,7 +25,7 @@ public class ExceptionController {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    // Manejo de excepciones genéricas
+    // Generic exception handling
     @ExceptionHandler(Exception.class)
     public ResponseEntity<CustomResponse<String>> handleException(Exception ex) {
         CustomResponse<String> response = new CustomResponse<>(null, ex.getMessage());

@@ -11,7 +11,7 @@ public class Product {
     @Min(value = 0, message = "Price must be a non-negative integer.")
     private Double price;
 
-    @Pattern(regexp = "^(physical|digital)$", message = "Type must be either 'physical' or 'digital'")
+    @Pattern(regexp = "^(físico|digital)$", message = "Type must be either 'físico' or 'digital'")
     private String type;
 
     @DecimalMin(value = "0.0", message = "Shipping cost must be a non-negative value for physical products.")
