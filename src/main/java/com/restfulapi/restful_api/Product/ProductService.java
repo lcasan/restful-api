@@ -40,7 +40,7 @@ public class ProductService {
         String sql = String.format(
             """
                 INSERT INTO products (name, price, type, shipping_cost, download_link) 
-                VALUES ('%s', %.2f, '%s', %s, %s);
+                VALUES ('%s', %.2f, '%s', %s, %s) RETURNING code;
             """,
             product.getName(),
             product.getPrice(),
@@ -50,7 +50,8 @@ public class ProductService {
         );
 
         try{
-            jdbc.execute(sql);
+            Integer code = jdbc.queryForObject(sql, Integer.class);
+            product.setCode(code);
             return product;
         } catch (Exception e) {
             e.printStackTrace();

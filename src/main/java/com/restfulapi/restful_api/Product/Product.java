@@ -37,6 +37,10 @@ public class Product {
         return this.code;
     }
 
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
     public String getName() {
         return this.name;
     }
